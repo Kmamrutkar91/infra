@@ -1,0 +1,41 @@
+version: '3'
+services:
+  app:
+      container_name: node-server
+      restart: always
+      build: .
+      ports:
+        - '51005:51005'
+      depends_on:
+        - mongo
+        - mysql
+      
+  mongo:
+     container_name: mongo_container
+     image: mongo
+     volumes:
+        - mongo:/data/db
+     ports: 
+       - '27017:27017'
+     environment:
+          MONGODB_URI: mongodb://mongoDB:27017
+          DB_NAME: backend_demo 
+          # MONGO_INITDB_ROOT_USERNAME: ""
+          # MONGO_INITDB_ROOT_PASSWORD: ""
+     
+  
+  mysql:
+     container_name: mysql_container
+     image: mysql:latest
+     volumes:
+      - "./.mysql-data/db:/var/lib/mysql"
+     restart: always
+     ports:
+      - 3307:3307
+     environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+
+volumes:
+  mongo: {}
+  mysql: {}
